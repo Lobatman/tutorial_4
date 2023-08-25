@@ -1,0 +1,477 @@
+---
+title: | 
+  ![](https://i.imgur.com/SWWUQpP.png){width=500px style="display: block; margin:0 auto;"} 
+  O que é estatística? Unidade, dado estatístico e variáveis
+author: "Victor Lobato dos Santos"
+date: "2023-03-22"
+output:
+  html_document:
+    highlight: haddock
+    includes:
+      in_header: "fever_icon.html"
+    theme: flatly
+    number_sections: yes
+    toc: yes
+    toc_float:
+      collapsed: yes
+      smooth_scroll: yes
+  pdf_document:
+    toc: yes
+---
+<div class="text-justify">  
+
+# Introdução do módulo  
+  
+Este tutorial se trata de uma sequência de tutoriais que buscam trazer a integração da programação ao ambiente acadêmico, mais especificamente, o conhecimento do Software **R** com a disciplina de Bioestatística.  
+Neste momento, abordaremos uma parte introdutória da disciplina, voltada para a diferenciação e conhecimento da estatística descritiva e inferencial, dados estatísticos e variáveis.  
+Como objetivo aqui é a integralização do conhecimento estatístico ao software **R**, tentaremos sempre combinar exemplos com as funcionalidades do software.  
+
+# O que são variáveis  
+  
+Na estatística, variáveis são atributos que podem ser observados e mensurados em uma unica unidade, podendo variar de uma unidade para outra. Por exemplo:  
+  
+```{r, warning=FALSE, message=FALSE}
+
+tabela_prof <- data.frame(
+  Professores = c("Joao", "Luisa", "Ana", "Marcos"),
+  Altura_m = c(1.60, 1.55, 1.75, 1.70),
+  N_de_Pets = c(5, 1, 6, 0),
+  Dificuldade_da_Disciplina = c("Média", "Média", "Alta", "Baixa"),
+  Área_de_atuação = c("Zoologia", "Anatomia", "Botânica", "Educação")
+)
+
+tabela_prof <- setNames(tabela_prof, 
+                   c("Professores", "Altura(m)", "N° de pets", 
+                     "Dificuldade da Disciplina", "Área de atuação"))
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(kableExtra)
+
+kable(tabela_prof) %>%
+  kable_classic(full_width = F, html_font = "Cambria") %>%
+  kable_styling(bootstrap_options = "condensed", full_width = FALSE) %>%
+  row_spec(0, bold = TRUE) %>%
+  row_spec(1:nrow(tabela_prof), align = "c")
+  
+
+
+```
+
+  
+Observe que no exemplo apresentado, a coluna **Altura(m)** e **N° de Pets** recebe valores numéricos enquanto que a coluna **Dificuldade na Disciplina** e **Área de atuação**, recebem valores em texto (categóricos). Ambas as colunas são consideradas variáveis, pois existem valores atribuídos a elas.  
+  
+## Variáveis numéricas (quantitativas)
+  
+As variáveis numéricas ou quantitativas, são as variáveis que apresentam valores numéricos que podem ser contados ou mensurados. Elas são divididas em dois tipos: contínuas (do tipo *dbl* no software R), e discretas (do tipo *int* no software R).  
+Uma *variável contínua* é um tipo de varíavel que sempre atribuirá valores que podem ser mensurados / fracionados, Como por exemplo: peso, altura, tempo, etc.  
+Uma *variável discreta* são variáveis que sempre assumirão valores inteiros, como por exemplo: N° de pets, N°de filhos, N° de infectados, etc.  
+  
+## Variáveis categóricas (qualitativas)  
+  
+As variáveis categóricas (do tipo *str* no software R) são aquelas que não possuem atribuição de valores numéricos e que pelo seu próprio nome são definidas por categorias, representando determinada classificação de um objeto ou indivíduo, sendo divididas também em dois tipos: ordinais e nominais.  
+Variáveis categóricas ordinais são aquelas que apresentam uma hierariquia, como Por exemplo: Dificiculdade de disciplinas, nível de escolaridade, Área de atuação, etc.  
+  
+# As variáveis no software R  
+  
+No software R, as variáveis possuem uma definição praticamente identicas ao que já vimos, porém, adaptadas para uma interface de programação. Assim, no R, as varíaveis são tipos de objetos que permitem realizar nelas, o armazenamento de valores podendo ser eles, números, textos, vetores, matrizes, etc. E para cada tipo de variável atribuída, existem regras que devem ser seguidas pois terão impactos diretos em suas análises.  
+
+Considere o que já vimos sobre variáveis numéricas e categóricas. No R as variáveis numéricas contínua e discreta são categorizadas pelo tipo *Numeric* e são divididas respectivamente como *double* (dbl) e *integer* (int). As mesmas possuem basicamente a mesma descrição dentro e fora do software R.  
+Já as variáveis qualitativas que são divididas em ordinais e categóricas recebem o nome de *string* (str) que são todas as variáveis que atribuem valores textuais. 
+No R temos variáveis do tipo integer, double, string e logic. Ao decorrer deste e de outros tutoriais, poderemos nos familiarizar com cada uma delas
+  
+No R, para definirmos uma varíavel, utilizamos o sinal `=` ou `<-`, como por exemplo:  
+```{r, message=FALSE, warning=FALSE}
+var_integer <- 10
+var_double <- 5.5
+var_string <- "sou um texto"
+```
+  
+Observe que, no exemplo apresentado, a variável **var_integer** e **var_double** possui um valor numérico e a variável **var_string** possui um valor em formato de texto (**string**).Ao criar essas duas variáveis, a IDE do RStudio automaticamente irá classifica-las de acordo com o seu tipo.  
+Podemos visualizar a classe de uma variável através da função `class()`:  
+```{r, message=FALSE, warning=FALSE}
+class(var_integer) ; class(var_double) ; class(var_string)
+```
+  
+# Estatísitica Descritiva
+  
+A estatística descritiva, como seu próprio nome já nos indica, visa descrever e sumarizar os dados. A sumarização desses dados podem ser apresentadas tando em forma de gráfico, como em formas numéricas através de tabelas. Assim, consideramos então que o principal objetivo da estatística descritiva é realzar a s´ntese de dviersos valores de uma mesma natureza, o que permite apresentar uma visão geral desses valores através de três principais tipos: *Tabelas, Gráficos e medidas descritivas*  
+  
+## Como construir uma tabela no R  
+  
+Para construir uma tabela utilizando a IDE do **RStudio**, primeiro é necessário carregar o banco de dados que se irá trabalhar.  
+  
+### Banco de dados
+
+No R, os bancos de dados (tabelas) são utilizados para armazenar dados ou informações estruturadas, que permite o gerenciamento de toda informação ali coletadas. Eles podem ser divididos em Banco de dados relacionais e não relacionais. A partir destes bancos de dados, que se realiza a base de uma análise de dados.
+
+É interessante que, seu banco de dados seja salvo em formato *.csv*, mais especificamente, *CSV UTF8 (separado por vírgulas)*, para evitar possíveis conflitos e erros pois, o CSV é um tipo de arquivo que utiliza as informações de colunas diferentes, separando-as por vírgula.
+
+### Como carregar o banco de dados: Selecionando o diretório de trabalho
+
+Para carregar um banco de dados no RStudio, deve-se seguir alguns passos:\
+Primeiro é preciso estabelecer qual o diretório de trabalho (working dicerctory).  
+O diretório de trabalho é a pasta a qual serão salvos / carregados os arquivos.\
+Para isso, vá na opção *Session* no canto superior direito de seu RStudio e selecione a opção *Set Working Directory*. Nesta aba terão duas opções, a primeira (To source File Location) fará com que o R estabeleça como diretório de trabalho, a pasta na qual você está trabalhando, portanto, caso seu **script** esteja na área de trabalho, por exemplo, é lá que será salvo.\
+A segunda opção da aba *Set Working Directory*, nomeada *Choose Directory*, te levará a selecionar o local que queira salvar o diretório, a partir dele, você pode escolher qualquer pasta de seu computador.
+
+Existe outra maneira de selecionar o diretório de trabalho, esta é feita a partir do comando `setwd()`, que significa "select working directory". a partir dela você escreverá entre áspas, no parênteses, o diretório selecionado, como por exemplo: `setwd("C:/Users/Victor/Desktop")`.  
+  
+### Carregando o banco de dados
+
+Para carregar um banco de dados, utiliza-se a função `read.csv()`. No parênteses, deve ser escrito o nome do arquivo com o final .csv como por exemplo:  
+  
+```{r, message=FALSE, warning=FALSE}
+library(dplyr)
+
+dados <- read.csv2("Banco de Dados 2_csv8.csv")
+
+View(dados)
+glimpse(dados)
+```
+  
+Existem diversas forams de se plotar uma tabela, aqui serão passadas duas formas simples de se fazer.\
+* A primeira é a partir do comando `View()`, que mostra todos os dados da tabela, bem semelhante a uma planilha excel;  
+* A segunda é a partir do comando `glimpse()` que permite visualizar a quantidade de observações e variáveis da tabela, separando as mesmas pelo seu tipo (int, fct, dbl).  
+  
+# Tabelas de frequência (variáveis categórica)
+  
+Uma tabela de frequência, de forma resumida, se trata de uma maneira para organizar os dados de ma tabela de forma que mostre a frequência de cada um dos diferentes valores de uma variável. Em uma tabela de frequência, é recorrente serem inclusas as frequências relativas, acumuladas e frequencia relativa acumulada. 
+  
+Tendo por entendido, utilizaremos a tabela já apresentada para construir uma tabela de frequência de variáveis categóricas. Em nosso banco de dados (**data frame**), temos duas varíaveis categóricas, sendo elas Gênero e Nivel_de_ensino. 
+
+Para exemplificar os tipos de frequência, utilizaremos o mesmo dataframe: 
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+library(rmarkdown)
+paged_table(dados)
+```
+
+## Frequência absoluta categórica 
+  
+Quando calculamos uma frequência absoluta, o que buscamos é saber quantas vezes uma determinada variável se repetiu em nosso dataframe e para isso, basta somar todos os números presente em uma variavel, A soma de toda frequência absoluta, é sua frequência total. A frequência absoluta é bastante utilizada para analisar dados estatísticos e também, é necessário calcular a frequência absoluta para realizar o calculo posterior de frequência relativa.   
+
+Primeiramente  então, criaremos uma tabela de *frequência absoluta* e, para isso iremos utilizar uma função da IDE base do R, ``table()``. Dentro do parênteses dessa função, você deve adicionar qual variável será adicionada na tabela, como por exemplo:  
+  
+```{r, message=FALSE, warning=FALSE}
+table(dados$Genero)
+```
+  
+
+Perceba que, dentro do parênteses dessa função temos ``dados$Genero``. Utilizamos **dados** como sendo o nosso dataframe ou nesse caso, nossa tabela enquanto que **Genero** representa nossa coluna com variáveis categóricas.  
+Ao rodar o código, obtivemos os valores ``F = 15, M = 15``, demonstrando que em cada uma dessas categórias possuem 15 indivíduos.  
+  
+```{r, message=FALSE, warning=FALSE}
+table(dados$Nivel_de_Ensino)
+
+```
+Seguimos o mesmo padrão para a coluna **Nivel_de_Ensino**, onde obtivemos uma tabela com a quantidade de indivíduos em seus respectivos niveis de ensino.  
+Mas perceba que, nossos dados estão separados em duas tabelas diferentes e, isso é pouco interessante para realizar uma análise de dados correta. Sendo assim, podemos realizar uma *tabela cruzada*.  
+Uma tabela cruzada irá definir de forma simultânea duas variáveis, separando por colunas e linhas. Observe a seguir:  
+  
+```{r, message=FALSE, warning=FALSE}
+table(dados$Genero, dados$Nivel_de_Ensino)
+```
+  
+Agora, em nossa tabela, os níveis de ensino foram separados por sexo Feminino e masculino através de uma referência crusada.  
+  
+
+## Frequencia relativa categórica
+  
+A frequencia relativa por sua vez, nos mostra a frequencia que X dado tem em relação ao seu total e para isso, calcula-se a frequencia absoluta dividida pelo número de dados coletados de uma variável.  
+$$fr=\frac{fa}{ft}$$
+
+Para construir uma tabela de frequência relativa no R, utilizamos a função ``prop.table()``. Dentro do parênteses, indicamos primeiro, que queremos utilziar a tabela (table) e em seguida nossos dados, como no exemplo a seguir: 
+
+```{r, message=FALSE, warning=FALSE}
+prop.table(table(dados$Genero))
+
+```
+Aqui, tivemos como resultado ``F= 0.5, M= 0.5``, indicando a nossa frequência relativa.
+
+```{r, message=FALSE, warning=FALSE}
+prop.table(table(dados$Nivel_de_Ensino))
+
+```
+  
+O mesmo acontece para o nosso Nivel_de_Ensino.
+  
+```{r, message=FALSE, warning=FALSE}
+prop.table(table(dados$Genero, dados$Nivel_de_Ensino))
+
+```
+  
+Ao utilizar a tabela cruzada, perceba que a frequencia relativa foi separada pelo sexo dos indivíduos, atribuindo então, resultados diferentes. Esses são jeitos diferentes de se fazer a frequencia relativa. Lembre-se que a frequencia relativa aqui, está levando em consideração o total da amostra (100%). 
+  
+# Tabela de frequência (Variáveis quantitativas)  
+  
+  As variáveis quantitativas podem ser definidas por todas varáveis que apresentam marjoritariamente números. Elas são divididas em duas categorias: discreta e contínuas.  
+  Variáveis **discretas** são um tipo de variável quantitativa a qual é representada por números inteiros (1, 2, 3, 4, 5...) e que podem ser **contados**. Como por exemplo o número de pessoas em um local, a quantitade de pets de um tutor, etc.
+  Por outro lado, existem as variáveis contínuas. Essas por sua vez são composta por números fracionados/decimais (1.5, 2.7, 14.8...) e que podem ser **mensurados**. Como por exemplo a altura de um indivíduo, o peso de determinado objeto, o salário de uma pessoa, etc.  
+    
+## Fequência discreta  
+  
+No R, para calcular a frequência absoluta de uma variável continua discreta, fazemos da mesma forma realizada para variáveis categóricas. Utilizando a nossa tabela exemplo e considerando que variáveis discretas são compostas por números inteiros, utilizaremos o Número de filhos.  
+  
+```{r, message=FALSE, warning=FALSE}
+table(dados$N_Filhos)
+
+```
+Observe que para este tipo de tabela no R, a primeira linha representa a quantitade de filhos enquanto que a segunda linha representa a quantitade de pessoas em relação a quantidade de filhos. Portanto podemos ver que 15 pessoas não possuem filhos, 7 pessoas possuem 1 filho(a), 6 pessoas possuem 2 filhos(as), e assim por diante.  
+  
+Para calcular a frequência relativa discreta, também fazemos da mesma maneira feita para a frequência categórica: 
+
+```{r, message=FALSE, warning=FALSE}
+prop.table(table(dados$N_Filhos))
+
+```
+Desta forma, podemos ver a frequência relativa sobre o Número de filhos. Aqui temos apresentado que 50% (0.500) das pessoas não possuem filhos, 23,3% (0.233) possuem um filho(a), 20% (0.200) possuem 2 filhos(as), 3% (0.033) possuem 3 filhos(as) e 3% (0.033) possuem 4 filhos(as).
+
+## Frequência contínua  
+ 
+Para criar uma tabela de frequência contínua no R, devemos seguir passos diferentes pois, precisamos definiir categorias para criar esta tabela pois o R não consegue determinar cada valor diferente como uma categoria, visto que existem valores decimais diferentes. Para isso precisamos primeiro determinar a amplitude dos dados. 
+ 
+### Determinando a amplitude dos dados  
+  
+Para analisar a amplitude dos dados e criar nossa tabela de frequência contínua, utilizaremos nossa tabela exemplo e para isso, pegaremos a coluna de Salários.  
+Ao determinar uma amplitude de dados, o que queremos saber é qual o menor e o maior valor contido em determinada variável. Visto isso usaremos a função ``range()``  
+  
+```{r, message=FALSE, warning=FALSE}
+
+range(dados$Salario)
+
+```
+Como queremos descobrir a amplitude da coluna Salário, usamos ``range(dados$Salario)``. Lembre-se que usamos o ***$*** para fazer a concatenação e demonstrar o que queremos indicar na tabela. Observe que o menor salário é 1.0 e o maior é 5.8. Considere que os valores aqui são divididos em salários mínimos de forma que 1.0 indica um salário mínimo 
+
+
+### Regra Sturges  
+  
+Existe outra opção para realizar a amplitude, considerando que queremos começar a amplitude a partir de zero e ir até o limite máximo de 6 e, dessa forma, conseguimos conter todos os valores e para iss utilizaremos nesta opção a função **Sturges**. Esta função foi feita a partir da regra Sturges ou regra do logaritmo, que se trata de um critério utilizado para determinar o número de classes ou intervalos que são necessários para demonstrar a partir de gráficos um determinado conjunto de dados estatísticos. Sendo assim, utilizamos esta regra quando queremos calcular o número de classes de uma tabela de frequência, o que claramente se adequa ao nosso objetivo.  
+Vamos utilizar então a função ``nclas.Sturges()``, onde dentro do parêntese colocaremos nossa variável.
+
+```{r, message=FALSE, warning=FALSE}
+nclass.Sturges(dados$Salario)
+```
+Ao rodar o código, obtivemos o número 6, ou seja, a quantidade recomendada de intervalo é de 6. 
+  
+### Tabela de frequência contínua (Regra Sturges)  
+  
+Seguindo a regra sturges e de como queremos o mínimo e o máximo de nossa amplitude, utilizamos a função ``table(cut())``. A função ***cut*** servirá para separar a nossa variável em classes diferentes de valores. Nossa função será ``table(cut(dados$Salario, seq(0, 6, l = 7)))``, observe que utilizamos também a função ***seq*** que nos serve para gerar uma sequência do que queremos e o parâmetro ***l*** que nos indicará quantas classes devem existir.  
+No código anterior, com a regra Sturges, nos foi determinado que a quantidade adequada de intervalos seria 6, portanto adicionaremos uma unidade a mais pois, se essa função fosse aplicada com apenas 6, o R criaria uma classe a menos por isso, sempre colocamos uma unidade a mais. 
+  
+```{r, message=FALSE, warning=FALSE}  
+
+table(cut(dados$Salario, seq(0, 6, l = 7)))
+  
+```
+Observe que ao rodar o código temos classes de valores começando do 0 e terminando na última classe 6. Podemos ver que, seguindo os padrões anteriores, no primeiro intervalo (de 0 a 1) temos uma pessoa, já no segundo intervalo (de 1 a 2) temos 6 pessoas.  
+  
+Uma dica que o R nos dá nesta tabela é que, quando temos intervalos que terminam em **]** significa que o último valor está incluso por exemplo, em **(0,1]** o número 1 está incluso neste intervalo. Quando temos o **(** no início do intervalo, significa que aquele valor não está incluso. Se uma pessoa ganhasse qualquer valor a cima de 1.0 neste exemplo, ela estaria portanto dentro da classe seguinte.  
+  
+# Criando Gráficos no R  
+  
+Gráficos são representações visuais que nos ajudam durante a interpretação de dados que foram previamente distribuídos em uma tabela ou conjunto de dados. Eles são parte importante de estudos que servem para realizar comparações, demonstrar padrões de variáveis categóricas e numéricas.  
+  
+Dentre os tipos de gráficos mais utilizados e conhecidos, temos os histogramas (barras) e gráficos de setores (pizza). Nós aprenderemos a seguir como realizar a construção destes gráficos utilizndo a IDE básica do R e posteriormente ampliaremos o conhecimento a partir de alguns pacotes para construções de gráficos.  
+  
+Primeiro iremos aprender sobre o histograma de frequência. O histograma de frequência é utilizado principalmente para variáveis quantitativas com intervalos de classe, demonstrando para o leitor, a frequência de dados em um intervalo de classes.  
+  
+## Passo 1: Criando e transformando os dados de uma tabela 
+ 
+Para construção da nossa tabela de frequência utilizaremos um exemplo:  
+Suponha que, ao estudar a quantidade de albumina no plasma sanguíneo de 25 pacientes com determinada doença, um pesquisador obteve os seguintes valores: 5.1, 5, 5.2, 4.5, 4.8, 4.9, 5, 5.2, 5.4, 5.1, 4.9, 5, 4.9, 5.1, 5.3, 5.1, 5.1, 5.3, 4.7, 5.3, 4.7, 5.4, 5, 5.5, 5.  
+A partir desses valores, vamos construir nossa tabela contendo frequência absoluta, frequência relativa, frequência acumulada crescente e frequência acumulada decrescente  
+  
+Como forma de demonstrar diferentes formas de se construir tabelas e gráficos, nós iremos apresentar uma forma diferente para criar a tabela e o gráfico. Optaremos por a forma abaixo pois, as funções do R possuem passos já programados de como realizar determinados cálculos, e o que queremos aqui é mostrar como se faz uma tabela de frequência utilizando parâmetros que geralmetne são vistos em uma aula de bioestatística.  
+Portanto, vamos seguir o seguinte código: 
+  
+```{r, message=FALSE, warning=FALSE}
+library(rmarkdown)
+
+qtd_albumina <- c(5.1, 5, 5.2, 4.5, 4.8, 4.9, 5, 5.2, 5.4, 5.1, 4.9, 5, 4.9, 5.1, 5.3, 5.1, 5.1, 5.3, 4.7, 5.3, 4.7, 5.4, 5, 5.5, 5)
+
+sort(qtd_albumina) #ordena os dados
+range(qtd_albumina) #descobre o menor e o maior número
+
+amp_total <- ceiling(max(qtd_albumina)-min(qtd_albumina))
+amp_total
+
+k <- nclass.FD(qtd_albumina)
+k
+length(qtd_albumina)
+k <- ceiling((sqrt(length(qtd_albumina))))
+k
+
+c <- amp_total / (k-1)
+c
+infclass <- min(qtd_albumina)
+infclass
+supclass <- infclass + (k*c)
+supclass
+
+brk <- seq(infclass,supclass,c)
+brk
+
+tabela_freq_albumina <- table(cut(qtd_albumina,breaks = brk, right = FALSE))
+tabela_freq_albumina
+tabela_freq_albumina <- prop.table(tabela_freq_albumina)
+tabela_freq_albumina
+
+```
+### Explicando a criação da tabela  
+  
+O primeiro passo para a criação desta tabela de frequências, que simula a quantidade de albumina no plasma sanguíneo de 25 pacientes, foi criar o vetor ``qtd_albumina`` que agrupassem os dados.  
+  
+Utilizamos a função ``sort()`` para classificar os dados existentes em ``qtd_albumina`` em ordem crescente e, para descobrir qual o menor e o maior número dentro do nosso conjunto de dados, utilizamos a função ``range()`` onde obtivemos os números 4.2 e 5.8.  
+  
+
+Para calcular a amplitude total devemos fazer a diferença entre o maior e o menor número de nosso conjunto de amostra que nesse caso já descobrimos. Portanto criamos a variável ``amp_total`` e aderimos a ela a função ``ceiling()`` que arredonda o valor para o número inteiro mais próximo e então, utilizamos os termos ***max*** e ***min*** para recrutar os valores máximos e mínimos da nossa amostra e subtraí-las.  
+  
+
+Para descobrir o número de classes (K) nós utilizamos a função ``nclass.FD`` que determina o número de classes a serem usadas em uma tabela de frequência, porém, ela segue a fórmula de Freedman-Diaconis, que leva em consideração o tamanho da amostra e a amplitude dos dados para determinar o número ideal de classes e o resultado retornado por essa função pode não ser um número inteiro. Isso pode ser um problema ao determinar as classes e portanto, nós arredondamos o resultado para o número inteiro mais próximo com a função ``ceiling()``. Em nosso código, a função ``nclas.FD()`` não foi executada corretamento devido ao fato de não conter os argumentos corretos e para corrigir isso, utilizamos o número de observações no vetor ``qtd_albumina`` que foi obtido através da função ``length()``, para determinar o número de classes. 
+Como o número de classes (k) é definido pela raiz quadrada do número de observações, arredondado para cima, nós utilizamos a função ``sqrt()`` que calcula a raiz quadrada de um número e assim fizemos a variável ``k <- ceiling((sqrt(length)(qtd_albumina))))``  
+  
+Para definir a amplitude de cada classe, nós calculamos a amplitude total dividida pelo número de classes menos 1, e para isso fizemos a variável ``c <- amp_total / (k-1)``  
+  
+Os intervalos de classes são definidos a partir do limite inferior e superior das classes, para isso criamos a variável ``infclass <- min(qtd_albumina)`` pois usando a função ``min()``, definimos o menor valor contido dentro do vetor, este valor é atribuído a variável infclass, que representará o limite inferior da primeira classe. Logo em seguida, determinamos o limite inferior com a variável ``supclass <- infclass + (K*c)`` pois o limite superior da última classe é determinado adicionando o número de classes vezes o tamanho do intervalode classes (c) no limite inferior da primeira classe (infclass), e este valor é atribuído na variável supclass.  
+  
+Na etapa seguinte do nosso código, criamos a variável ``brk <- seq(infclass,supclass,c)``, aqui utilizamos a função ``seq()`` para criar uma sequência de valores que representem os limites de cada classe na tabela. Como já visto antes, esta função cria uma sequência de números em um intervalo especifico com um tamanho de passo especificado. O primeiro argumetno representa o valor inicial da sequência, que é definido com oo limite inferior da primeria classe (infclass), o segundo argumento representa o valor final da sequência, que por sua vez é definido como o limite superior da última classe (supclass) e, o terceiro argumento representa o tamanho do passo (contagem) da sequência que é definido pelo tamanho do intervalo de classes (c).  
+Assim, a variável ***brk*** armazenou um sequencia de valores que representam os limites de cada classe na tabela de frequência.  
+  
+Chegando ao final do código da nossa tabela, criamos a variável tabela ``tabela_freq_albumina <- table(cut(qtd_albumina,breaks = brk, right = FALSE))``, aqui utilizamos a função ``table()`` e ``cut()`` para criar a tabela de frequências. A função ``cut()`` divide o vetor ***qtd_albumina*** em classes com base nos limites que foram especificados na variáel ***brk*** anteriormente. O argumento ``breaks = `` é usado para especificar os limites das classes que os dados serão agrupados na tabela e deve ser um vetor contendo os limites de cada classe, por isso que, em nosso código ele foi definido com a variável ***brk*** que contém os limites de cada classe.  
+O argumento ``rigth = FALSE`` serviu para indicar que o intervalo de classes não inclui o limite superior. A função ``table()`` por si, foi usada para contar o número de valores em cada classe e criar a tabela de frequências.  
+  
+Por fim, utilizamos também a função ``prop.table`` para calcular as frequências relativas. 
+  
+
+  
+## Passo 2: Construindo o Histograma  
+
+```{r, message=FALSE, warning=FALSE}
+hist(qtd_albumina,  
+     main = "Qtd de albumina", 
+     xlab = "Qtd de albumina g/100 mL", ylab = "Freq. Absoluta", 
+     col = c("blue"), 
+     border = c("royalblue"),
+     breaks = brk,
+     right = FALSE,
+     axes = FALSE
+)
+axis(1, at=seq(infclass,supclass,c))
+axis(2, at=seq(0,max(tabela_freq_albumina),2))
+
+```
+  
+Para a construção do histograma, nós utilizamos a função ``hist()``. Esta função é usada para criar histogramas e atribuimos a ela alguns parâmetros, como é possível ver no código. Primeiramente precisamos atribuir a função hist, a nossa variável com os valores da tabela (qtd_albumina). Em seguida é preciso definir o título, para isso utilizamos o parâmetro ``main = `` que define o título principal do histograma.  
+É preciso também definir os rótulos do eixo X e eixo Y, através dos parâmetros ``xlab = `` e ``ylab = ``, que irão servir para descrever a representação dos eixos X e Y.  
+O Parâmetro ``col = `` define a cor das barras do histrograma, enquanto que o parâmetro ``border = `` define a cor das bordas do histograma.  
+Para definir os limites das classes do histograma, utilizamos o parâmetro ``breaks = `` e especificamos ele com a variáel que criamos para isso.  
+``right`` serve para controlar se os limites das classes estarão à direita ou exclusivamente à direita, ao definir ***FALSE***, esses limites são inclusivos à esquerda e exclusivos à direita.  
+Utilizamos ``axes`` para definir se os eixos x e y irão ser desenhados no gráfico, ao definir como ***FALSE***, esses eixos não serão desenhados. Para isso, utilizamos a função ``axis()`` para adicionar eixos personalizados.  
+Em ``axis(1, at=seq(infclass,supclass,c))`` nós adicionamos o eixo X ao gráfico. O argumento 1 mostra que será adicionado o eixo x, o argumento **at** serve para definir a posição dos marcadores no eixo x. Neste sentido nós utilizamos ``seq(infclass, supclass, c)`` para criar uma sequência dos valores com desenvolvimento igual o tamanho de cada classe (c) a partir do limite inferior da primeira classe (infclass) até o seu limite superior (supclass).  
+Em ``axis(2, at=seq(0,max(tabela_freq_albumina),2))``, nós adicionamos o eixo y no gráfico, indicando através do argumento **2**. Aqui foi utilizado ``seq(0,max(tabela_freq_albumina),2)`` para criar uma sequências de valores com crescimento de 2 a partir de 0 até o valor máximo da tabela de frequências.
+
+
+### Tabela para gráfico de setores
+
+Para exemplificar, iremos criar uma tabela fictícia para posterior criação de nosso gráfico. 
+
+```{r, message=FALSE, warning=FALSE}
+
+doenca <- c(rep("leve", 30), rep("moderada", 15), rep("grave", 5))
+freq_abs <- table(doenca)
+freq_acum <- cumsum(freq_abs)
+freq_perc <- round(prop.table(freq_abs) * 100, 2)
+angulo <- round((freq_abs/sum(freq_abs)) * 360)
+
+tabela_doenca <- data.frame(categorias = names(freq_abs),
+                      frequencia_absoluta = as.numeric(freq_abs),
+                      frequencia_acumulada = as.numeric(freq_acum),
+                      porcentagem = freq_perc,
+                      angulo = angulo)
+
+```
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+
+tabela_doenca <- tabela_doenca[, c("categorias", "frequencia_absoluta", "frequencia_acumulada", "porcentagem.Freq", "angulo.Freq")]
+
+```
+
+```{r, message=FALSE, warning=FALSE}
+tabela_doenca <- setNames(tabela_doenca, 
+                          c("Gravidade da Doenca", "Freq_Absoluta", 
+                            "Freq_Acumulada", "Porcentagem", "Angulação"))
+```
+  
+A tabela a cima servirá como orientação para nosso gráfico de setores. A criação desta tabela seguiu os padrões que já foram explicados anteriormente no decorrer deste tutorial, mas para deixar mais didático, vamos entender como ela foi criada.  
+  
+Primeiro nós organizamos os dados em uma variável ``doenca <- c(rep("leve", 30), rep("moderada", 15), rep("grave", 5))``. Nesta tabela, queremos exemplificar a gravidade de certa doença em determinado lugar, então determinamos três categorias (leve, moderada e grave), e adicionamos os valores ficticios que queriamos respectivamente (30, 15, 5). Para isso nós utilizamos a função ``rep()`` para criar um vetor que tenha as categorias da varíavel "Gravidade da doença". Como no exemplo nós temos 30 casos leves, 15 casos moderados e 5 graves, o vetor é composto por 30 elementos com o valor "leve", 15 com o valor "moderado" e 5 com o valor "grave" que correspondem às categorias de gravidade da doença que estão sendo analisadas. De forma resumida, a função ``rep()`` foi usada para criar um vetor com as categorias da variável "gravidade da doença" de forma repedita de acordo com suas frequências.  
+  
+Para calcular a frequência absoluta, nós usamos a função ``table()`` que cria uma tabela de contagem das categorias, portanto criamos a variável ``freq_abs <- table(doenca)``.  
+  
+Fizemos o cálculo das frequências acumuladas de uma maneira diferente para introduzir uma opção, uma das várias que o R pode nos disponibilizar. Calculamos então as frequências acumuladas, a partir da função ``cumsum()``, esta função pode ser utilizada para calcular a frequ~encia acumulada de uma variável. De forma resumida, esta função considerou que a primeira categoria (leve) possui 30 casos, a segunda categoria (moderada) possui 45 casos (30 + 15) e a terceira categoria (grave) tem 50 casos (30 + 15 + 5). Esta função permitiu calcular as frequências acumuladas de forma rápida e eficiente, sendo mais uma opção para se utilizar na construção de códigos no R.  
+  
+A coluna de porcentagens foi construida a partir da variável ``freq_perc <- round(prop.table(freq_abs) * 100, 2)``. Aqui nós utilizamos a função ``round()`` que no R, é usada para arredondar valores numéricos, sendo uma opção mais rápida em alguns casos. Caso quiséssemos fazer o cálculo da porcentagem de cada categoria com base em suas frequências absolutas, poderiamos criar uma variável com a função ``sum`` e em seguida multiplica-la por 100, porém alcancariamos um resultado com várias casas decimais, podendo deixar nossa tabela confusa e de difícil interpretação. Então, a função ``round()`` permitiu arredondar as porcentagens para duas casas decimais como apresentada no final desta variável (`` * 100, 2``), deixando nossa tabela mais concisa.  
+  
+A angulação é uma parte fundamental para que possamos criar um gráfico de setores, nós calculamos ela a partir da variável ``angulo <- round((freq_abs/sum(freq_abs)) * 360)``, onde dividimos a frequência absoluta de cada categoria pelo número total das frequências absolutas, multiplicando por 360 que corresponde a quantidade de graus de uma circunferência.  
+  
+Para criar de fato nossa tabela ``tabela_doenca``, nós chamamos a função ``data.frame``, utilizada para armazenar as tabelas de dados no R e, para definir todas as colunas separamos da seguinte forma: 
+  
+* ``categorias``: demonstra as categorias de gravidade desta doença (leve, moderada, grave);  
+* ``frquencia_absoluta``: demonstra as frequências absolutas de cada categoria;  
+* ``frequencia_acumulada``: demonstra as frequências acumuladas de cada categoria;  
+* ``porcentagem``: demonstra as porcentagens de cada categorias, nesse caso, a proporção de casos observados em cada uma das categorias em relação ao total de casos;  
+* ``angulo``: demonstra os ângulos de cada categoria para criação do gráfico.  
+  
+Por fim, usamos a função ``setNames`` para mudar os nomes de nossas colunas.
+
+  
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+library(kableExtra)
+
+kable(tabela_doenca) %>%
+  kable_classic(full_width = F, html_font = "Cambria") %>%
+  kable_styling(bootstrap_options = "condensed") %>%
+  row_spec(0, bold = TRUE) %>%
+  row_spec(1:nrow(tabela_doenca), align = "c")
+
+```
+
+### Criando o gráfico  
+  
+
+Na IDE base do R, podemos utilizar a função ``pie()`` para criar um gráfico de setores.    
+
+```{r, warning=FALSE, message=FALSE}
+pie(tabela_doenca$Freq_Absoluta, 
+    labels = "", col = c("red", "purple", "blue"), 
+    clockwise = TRUE, main = "Gravidade da doenca")
+legend("topright", legend = tabela_doenca$"Gravidade da Doenca", 
+       fill = c("red", "purple", "blue"))
+
+```
+  
+De acordo com o código do nosso gráfico, utilizando a função ``pie(tabela_doenca$Freq_Absoluta``, foi atribuído dentro desta função, nosso vetor ``tabela_doenca``, concatenando ($) com a frequência absoluta ``Freq_Absoluta`` de cada categoria da variável em questão (gravidade da doença). Foi atribuido então, dentro da função ``pie`` algumas configurações:  
+  
+* ``labels = ""``: A função ***labels*** é utilizada para criar as etiquetas que aparecem em cada um dos setores do gráfico, e a partir delas é possível identificar qual categoria de nossa variável esta sendo representada. Na construção deste código, foi adicionado o argumento ``""``, para indicar que as etiquetas não devem ser exibidas no gráfico, proém se quisessemos, poderiamos mostrar essas etiquetas, a partir de descrições nesta função correspondente a cada uma das categorias. Por exemplo: ``labels = c("leve", "moderada", "grave")``.  
+  
+* ``col = c("red", "purple", "blue")``: A função ***col*** é usada para definir as cores de cada setor do gráfico, também podendo ser utilizada em qualquer tipo de gráfico. Podemos adicionar as cores através de seus nomes em inglês, entre **""**, ou por padrões denominados ***HEX collors*** ou cores hexadecimais. Podemos encontrar padrões hex collors no google;  
+  
+* ``clockwise = TRUE``: Indica que os setores devem ser construídos no sentido horário, caso quiséssemos que fosse apresentado em sentido anti-horário, poderiamos substituir o argumento ***TRUE*** por ***FALSE***. Lembrando que isso não afeta a precisão das informações do gráfico.  
+  
+* ``main = "Gravidade da doenca"``: A função ***main = *** adiciona um título ao gráfico.  
+  
+* ``legend("topright", legend = tabela_doenca$"Gravidade da Doenca"``: a função ***legend()*** é usada para adicionar legendas em um gráfico. O argumento ``topright`` mostra que as legendas devem aparecer no canto superior direito do gráfico. Podemos utilizar ***topleft***, ***bottomright***, ***bottomleft*** e ***center*** para indicar onde queremos que as legendas apareçam no gráfico.   
+O argumento ``legend = tabela_doenca$"Gravidade da Doença"``, indica que os nomes das categorias devem ser retirados da coluna **"Gravidade da Doenca"**. O argumento ``fill = c("red", "purple", "blue")`` indica as cores de acordo com as cores apresentadas no gráfico.  
+O resultado de tudo isso, é um gráfico de setores simples e de fácil interpretação.  
+  
+# Fim do módulo  
+  
+Neste tutorial, aprendemos algumas funções básicas do R, seguindo o conhecimento de estatística. Vale lembrar que todos os códigos apresentados aqui são apenas uma das várias maneiras de se construir tabelas e gráficos. Com o tempo e prática, é possível customizar cada vez mais esses códigos a partir de diferentes pacotes.  
+No R o pacote **ggplot2** traz várias customizações e novidades para se construir gráficos, no decorrer dos tutoriais tentaremos abordar algumas funções deste pacote.  
+Nos próximos tutoriais nos aprofundaremos sobre o conhecimento de medidas de posição e dispersão. Além de outros conhecimentos.
+
+
+</div>
