@@ -111,6 +111,8 @@ No R, os bancos de dados (tabelas) são utilizados para armazenar dados ou infor
 ### Como carregar o banco de dados: Selecionando o diretório de trabalho
 
 Para carregar um banco de dados no RStudio, deve-se seguir alguns passos:\
+  
+
 Primeiro é preciso estabelecer qual o diretório de trabalho (working dicerctory).  
 O diretório de trabalho é a pasta a qual serão salvos / carregados os arquivos.\
 Para isso, vá na opção *Session* no canto superior direito de seu RStudio e selecione a opção *Set Working Directory*. Nesta aba terão duas opções, a primeira (To source File Location) fará com que o R estabeleça como diretório de trabalho, a pasta na qual você está trabalhando, portanto, caso seu **script** esteja na área de trabalho, por exemplo, é lá que será salvo.\
@@ -132,7 +134,10 @@ glimpse(dados)
 ```
   
 Existem diversas forams de se plotar uma tabela, aqui serão passadas duas formas simples de se fazer.\
-* A primeira é a partir do comando `View()`, que mostra todos os dados da tabela, bem semelhante a uma planilha excel;  
+  
+
+* A primeira é a partir do comando `View()`, que mostra todos os dados da tabela, bem semelhante a uma planilha excel; 
+
 * A segunda é a partir do comando `glimpse()` que permite visualizar a quantidade de observações e variáveis da tabela, separando as mesmas pelo seu tipo (int, fct, dbl).  
   
 # Tabelas de frequência (variáveis categórica)
