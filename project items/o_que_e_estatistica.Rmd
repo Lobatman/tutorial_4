@@ -1,8 +1,8 @@
 ---
 title: | 
   ![](https://i.imgur.com/SWWUQpP.png){width=500px style="display: block; margin:0 auto;"} 
-  O que é estatística? Unidade, dado estatístico e variáveis
-author: "Victor Lobato dos Santos; Wellington Donizet Ferreira"
+  Tutorial 4: Organização, manipulação e visualização de dados com o R
+author: "Victor Lobato dos Santos"
 output:
   html_document:
     highlight: haddock
@@ -19,15 +19,9 @@ output:
 ---
 <div class="text-justify">  
 
-# Introdução do módulo  
+# Variáveis numéricas e categóricas 
   
-Este tutorial faz parte de uma sequência de tutoriais que buscam trazer a integração da programação ao ambiente acadêmico, mais especificamente, o conhecimento do Software **R** com a disciplina de Bioestatística.  
-Neste momento, abordaremos uma parte introdutória relacionado a Bioestatística, voltada para a diferenciação e conhecimento da estatística descritiva e inferencial, dados estatísticos e variáveis.  
-Como objetivo aqui é a integralização do conhecimento estatístico ao software **R**, tentaremos sempre combinar exemplos com as funcionalidades do software.  
-
-# O que são variáveis  
-  
-Como visto no tutorial anterior, na estatística, variáveis são atributos que podem ser observados e mensurados em uma unica unidade, podendo variar de uma unidade para outra. Por exemplo:  
+Na estatística, variáveis são atributos que podem ser observados e mensurados em uma unica unidade, podendo variar de uma unidade para outra. Por exemplo:  
   
 ```{r, warning=FALSE, message=FALSE}
 
@@ -71,9 +65,6 @@ Uma *variável discreta* são variáveis que sempre assumirão valores inteiros,
   
 As variáveis categóricas (do tipo *str* no software R) são aquelas que não possuem atribuição de valores numéricos e que pelo seu próprio nome são definidas por categorias, representando determinada classificação de um objeto ou indivíduo, sendo divididas também em dois tipos: ordinais e nominais.  
 Variáveis categóricas ordinais são aquelas que apresentam uma hierariquia, como Por exemplo: Dificiculdade de disciplinas, nível de escolaridade, Área de atuação, etc.  
-  
-# As variáveis no software R  
-  
 No software R, as variáveis possuem uma definição praticamente identicas ao que já vimos, porém, adaptadas para uma interface de programação. Assim, no R, as varíaveis são tipos de objetos que permitem realizar nelas, o armazenamento de valores podendo ser eles, números, textos, vetores, matrizes, etc. E para cada tipo de variável atribuída, existem regras que devem ser seguidas pois terão impactos diretos em suas análises.  
 
 Considere o que já vimos sobre variáveis numéricas e categóricas. No R as variáveis numéricas contínuas e discretas são categorizadas pelo tipo *Numeric* e são divididas respectivamente como *double* (dbl) e *integer* (int). Elas possuem basicamente a mesma descrição dentro e fora do software R.  
@@ -93,33 +84,11 @@ Podemos visualizar a classe de uma variável através da função `class()`:
 class(var_integer) ; class(var_double) ; class(var_string)
 ```
   
-# Estatísitica Descritiva
-  
-A estatística descritiva, como seu próprio nome já nos indica, visa descrever e sumarizar os dados. A sumarização desses dados podem ser apresentadas tando em forma de gráfico, como em formas numéricas através de tabelas. Assim, consideramos então que o principal objetivo da estatística descritiva é realizar a síntese de dviersos valores de uma mesma natureza, o que permite apresentar uma visão geral desses valores através de três principais tipos: *Tabelas, Gráficos e medidas descritivas*  
-  
-## Como construir uma tabela no R  
-  
-Para construir uma tabela utilizando a IDE do **RStudio**, podemos cria-la diretamente dentro do software R, ou podemos carregar um banco de dados direto de um diretório.  
-  
-### Banco de dados
 
-No R, os bancos de dados (tabelas) são utilizados para armazenar dados ou informações estruturadas, que permite o gerenciamento de toda informação ali coletadas. Eles podem ser divididos em Banco de dados relacionais e não relacionais. A partir destes bancos de dados, que se realiza a base de uma análise de dados.
-
-É interessante que, seu banco de dados seja salvo em formato *.csv*, mais especificamente, *CSV UTF8 (separado por vírgulas)*, para evitar possíveis conflitos e erros pois, o CSV é um tipo de arquivo que utiliza as informações de colunas diferentes, separando-as por vírgula.
-
-### Como carregar o banco de dados: Selecionando o diretório de trabalho
-
-Para carregar um banco de dados no RStudio, deve-se seguir alguns passos:\
   
+# Tabelas de frequência (variáveis categórica)  
 
-Como já vimos, primeiro é preciso estabelecer qual o diretório de trabalho (working dicerctory).  
-O diretório de trabalho é a pasta a qual serão salvos / carregados os arquivos.\
-Para isso, vá na opção *Session* no canto superior direito de seu RStudio e selecione a opção *Set Working Directory*. Nesta aba terão duas opções, a primeira (To source File Location) fará com que o R estabeleça como diretório de trabalho, a pasta na qual você está trabalhando, portanto, caso seu **script** esteja na área de trabalho, por exemplo, é lá que será salvo.\
-A segunda opção da aba *Set Working Directory*, nomeada *Choose Directory*, te levará a selecionar o local que queira salvar o diretório, a partir dele, você pode escolher qualquer pasta de seu computador.
-
-Outra maneira também já vista, para selecionar o diretório de trabalho, é feita a partir do comando `setwd()` ("select working directory"). A partir dela você escreverá entre áspas, no parênteses, o diretório selecionado, como por exemplo: `setwd("C:/Users/Victor/Desktop")`.  
-  
-### Carregando o banco de dados
+## Carregando o banco de dados
 
 Para carregar um banco de dados, utiliza-se a função `read.csv()`. No parênteses, deve ser escrito o nome do arquivo com o final .csv como por exemplo:  
   
@@ -138,8 +107,6 @@ Existem diversas forams de se plotar uma tabela, aqui serão passadas duas forma
 * A primeira é a partir do comando `View()`, que mostra todos os dados da tabela, bem semelhante a uma planilha excel; 
 
 * A segunda é a partir do comando `glimpse()` que permite visualizar a quantidade de observações e variáveis da tabela, separando as mesmas pelo seu tipo (int, fct, dbl).  
-  
-# Tabelas de frequência (variáveis categórica)
   
 Uma tabela de frequência, resumidamente, é uma forma para organizar os dados de uma tabela de maneira que mostre a frequência de cada um dos diferentes valores de uma variável. Em uma tabela de frequência, é recorrente serem inclusas as frequências relativas, acumuladas e frequencia relativa acumulada. 
   
@@ -363,7 +330,7 @@ hist(qtd_albumina,
      axes = FALSE
 )
 axis(1, at=seq(infclass,supclass,c))
-axis(2, at=seq(0,max(tabela_freq_albumina),2))
+axis(2, at = seq(0, max(20), 2))
 
 ```
   
@@ -374,7 +341,7 @@ Para definir os limites das classes do histograma, utilizamos o argumento ``brea
 ``right`` serve para controlar se os limites das classes estarão à direita ou exclusivamente à direita, ao definir ***FALSE***, esses limites são inclusivos à esquerda e exclusivos à direita.  
 Utilizamos ``axes`` para definir se os eixos x e y irão ser desenhados no gráfico, ao definir como ***FALSE***, esses eixos não serão desenhados. Para isso, utilizamos a função ``axis()`` para adicionar eixos personalizados.  
 Em ``axis(1, at=seq(infclass,supclass,c))`` nós adicionamos o eixo X ao gráfico. O argumento 1 mostra que será adicionado o eixo x, o argumento **at** serve para definir a posição dos marcadores no eixo x. Neste sentido nós utilizamos ``seq(infclass, supclass, c)`` para criar uma sequência dos valores com desenvolvimento igual o tamanho de cada classe (c) a partir do limite inferior da primeira classe (infclass) até o seu limite superior (supclass).  
-Em ``axis(2, at=seq(0,max(tabela_freq_albumina),2))``, nós adicionamos o eixo y no gráfico, indicando através do argumento **2**. Aqui foi utilizado ``seq(0,max(tabela_freq_albumina),2)`` para criar uma sequências de valores com crescimento de 2 a partir de 0 até o valor máximo da tabela de frequências.
+Em ``axis(2, at = seq(0, max(20), 2))``, nós adicionamos o eixo y no gráfico, indicando através do argumento **2**. Aqui foi utilizado ``seq(0,max(20),2)`` para criar uma sequências de valores com crescimento de 2 a partir de 0 até o valor máximo de 20, no eixo Y.
 
 
 ### Tabela para gráfico de setores
@@ -470,12 +437,20 @@ De acordo com o código do nosso gráfico, utilizando a função ``pie(tabela_do
 * ``legend("topright", legend = tabela_doenca$"Gravidade da Doenca"``: a função ***legend()*** é usada para adicionar legendas em um gráfico. O argumento ``topright`` mostra que as legendas devem aparecer no canto superior direito do gráfico. Podemos utilizar ***topleft***, ***bottomright***, ***bottomleft*** e ***center*** para indicar onde queremos que as legendas apareçam no gráfico.   
 O argumento ``legend = tabela_doenca$"Gravidade da Doença"``, indica que os nomes das categorias devem ser retirados da coluna **"Gravidade da Doenca"**. O argumento ``fill = c("red", "purple", "blue")`` indica as cores de acordo com as cores apresentadas no gráfico.  
 O resultado de tudo isso, é um gráfico de setores simples e de fácil interpretação.  
+
+# Referências  
   
-# Fim do módulo  
+* Allaire J, Xie Y, Dervieux C, McPherson J, Luraschi J, Ushey K, Atkins A, Wickham H, Cheng J,
+  Chang W, Iannone R (2023). _rmarkdown: Dynamic Documents for R_. R package version 2.25,
+  <https://github.com/rstudio/rmarkdown>.  
   
-Neste tutorial, aprendemos algumas funções básicas do R, seguindo o conhecimento de estatística. Vale lembrar que todos os códigos apresentados aqui são apenas uma das várias maneiras de se construir tabelas e gráficos. Com o tempo e prática, é possível customizar cada vez mais esses códigos a partir de diferentes pacotes.  
-No R o pacote **ggplot2** traz várias customizações e novidades para se construir gráficos, no decorrer dos tutoriais tentaremos abordar algumas funções deste pacote.  
-Nos próximos tutoriais nos aprofundaremos sobre o conhecimento de medidas de posição e dispersão. Além de outros conhecimentos.
+*  Zhu H (2021). _kableExtra: Construct Complex Table with 'kable' and Pipe Syntax_. R package
+  version 1.3.4, <https://CRAN.R-project.org/package=kableExtra>.  
+  
+* R Core Team (2022). R: A language and environment for statistical computing. R Foundation for
+  Statistical Computing, Vienna, Austria. URL <https://www.R-project.org/>.  
+  
+  
 
 
 </div>
